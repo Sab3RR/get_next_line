@@ -42,7 +42,7 @@ int     get_next_line(const int fd, char **line)
 	    while (str[end])
         start = end;
         end = ft_findichar(str, '\n');
-        if (!(new = ft_lstnew((str[start], end - start)))
+        if (!(new = ft_lstnew((str + start), end - start)))
             return (0);
         if (!*list)
             *list = new;
