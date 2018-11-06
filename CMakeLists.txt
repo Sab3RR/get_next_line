@@ -62,4 +62,5 @@ libft/ft_lstdel.c
 libft/ft_lstadd.c
 libft/ft_lstiter.c
 libft/ft_lstmap.c
-libft/ft_strdup.c )
+libft/ft_strdup.c
+        libft/ft_lstpushback.c libft/ft_findichar.c)

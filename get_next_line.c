@@ -16,9 +16,15 @@ int     get_next_line(const int fd, char **line)
 {
 	static t_list   **list;
 	static t_list   *fd_list;
-	int             n;
+    t_list          *new;
+    size_t             n;
+    size_t          byte;
+    int             i;
+    int             start;
+    int             end;
 	char            *str;
-	t_list          *new;
+	char            **array;
+
 
 	if (!list)
 		if (!(list = (t_list **)malloc(sizeof(t_list))))
@@ -27,11 +33,24 @@ int     get_next_line(const int fd, char **line)
 	    *list = NULL;
 	if (!(str = ft_strnew(BUFF_SIZE)))
 	    return (0);
-	n = read(fd, str, BUFF_SIZE - 1);
-	str[n] = '\0';
-    if (!(new = ft_lstnew(str, BUFF_SIZE)))
-        return (0);
-    ft_lstadd(list, new);
-    return (n);
+	end = 0;
+	start = 0;
+	n = 0;
+	while ((byte = (size_t)read(fd, str, BUFF_SIZE - 1)))
+    {
+        str[n] = '\0';
+	    while (str[end])
+        start = end;
+        end = ft_findichar(str, '\n');
+        if (!(new = ft_lstnew((str[start], end - start)))
+            return (0);
+        if (!*list)
+            *list = new;
+        else
+            ft_lstpushback(*list, new);
+        n += byte;
+    }
+
+    return ((int)n);
 }
 
