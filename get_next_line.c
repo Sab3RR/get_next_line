@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-int     get_next_line(const int fd, char **line)
+t_list     *get_next_line(const int fd, char **line)
 {
 	static t_list   **list;
 	static t_list   *fd_list;
@@ -45,14 +45,14 @@ int     get_next_line(const int fd, char **line)
         str[byte] = '\0';
         n += byte;
         end = 0;
-        start = 0;
 	    while (str[end])
         {
-            start = end + 1;
-            end = ft_findichar(str + start, '\n') + start;
+            start = end;
+            end = ft_findichar(str + start, '\n') + start + 1;
             if (!(new = ft_lstnew((str + start), (size_t)(end - start))))
                 return (0);
             printf("%i\n%s\n", n, (char *)new->content);
+            ft_strcpy(*line, (char *)new->content);
             if (!*list)
                 *list = new;
             else
@@ -62,6 +62,6 @@ int     get_next_line(const int fd, char **line)
 
     }
 
-    return (n);
+    return (*list);
 }
 
