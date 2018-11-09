@@ -98,9 +98,11 @@ t_list				*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
 ** Extra functions
 */
 
+char				*ft_strnjoin(char const *s1, char const *s2, size_t n);
 void    			ft_lstpushback(t_list *alst, t_list *new);
 int                 ft_findichar(const char *str, int c);
 int					ft_isupper(int c);
 int					ft_islower(int c);
+
 
 #endif

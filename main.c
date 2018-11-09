@@ -11,18 +11,24 @@ int     main(void)
     int fd;
 
 
-
+printf("%lu\n", sizeof(t_list **));
     str = (char *)malloc(sizeof(char) * BUFF_SIZE);
-    fd = open("C:\\Users\\vadim\\ClionProjects\\get_next_line\\text", O_RDONLY);
+    fd = open("/Users/vsusol/CLionProjects/get_next_line1/text", O_RDONLY);
     i = get_next_line(fd, &str);
-    close(fd);
-    fd = open("C:\\Users\\vadim\\ClionProjects\\get_next_line\\text", O_RDONLY);
+    str = ft_strnew(1);
+    while (i)
+    {
+        str = ft_strnjoin(str, (char *)i->content, i->content_size);
+        i = i->next;
+    }
+    printf("%s", str);
+    fd = open("/Users/vsusol/CLionProjects/get_next_line1/text", O_RDONLY);
     i = get_next_line(fd, &str);
     free(str);
     str = ft_strnew(1);
     while (i)
     {
-        str = ft_strjoin(str, (char *)i->content);
+        str = ft_strnjoin(str, (char *)i->content, i->content_size);
         i = i->next;
     }
     printf("%s", str);
