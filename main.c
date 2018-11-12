@@ -7,30 +7,14 @@
 int     main(void)
 {
     char *str;
-    t_list *i;
+    int *i;
     int fd;
 
 
 printf("%lu\n", sizeof(t_list **));
     str = (char *)malloc(sizeof(char) * BUFF_SIZE);
     fd = open("/Users/vsusol/CLionProjects/get_next_line1/text", O_RDONLY);
-    i = get_next_line(fd, &str);
-    str = ft_strnew(1);
-    while (i)
-    {
-        str = ft_strnjoin(str, (char *)i->content, i->content_size);
-        i = i->next;
-    }
-    printf("%s", str);
-    fd = open("/Users/vsusol/CLionProjects/get_next_line1/text", O_RDONLY);
-    i = get_next_line(fd, &str);
-    free(str);
-    str = ft_strnew(1);
-    while (i)
-    {
-        str = ft_strnjoin(str, (char *)i->content, i->content_size);
-        i = i->next;
-    }
-    printf("%s", str);
+    while (get_next_line(fd, &str) == 1)
+        printf("%s", str);
     return 0;
 }

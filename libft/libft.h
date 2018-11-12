@@ -103,6 +103,7 @@ void    			ft_lstpushback(t_list *alst, t_list *new);
 int                 ft_findichar(const char *str, int c);
 int					ft_isupper(int c);
 int					ft_islower(int c);
+t_list				*ft_lstfree(t_list *alst);
 
 
 #endif

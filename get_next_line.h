@@ -19,6 +19,6 @@
 
 # define BUFF_SIZE 42
 
-t_list    *get_next_line(const int fd, char **line);
+int    get_next_line(const int fd, char **line);
 
 #endif
