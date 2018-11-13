@@ -71,7 +71,11 @@ FILES		= ft_memset.c \
 				ft_lstadd.c \
 				ft_lstiter.c \
 				ft_lstmap.c \
-				ft_strdup.c 
+				ft_strdup.c \
+				ft_findichar.c \
+				ft_lstfree.c \
+				ft_lstpushback.c \
+				ft_strnjoin.c
 
 OBJ			= $(FILES:%.c=%.o)
 
