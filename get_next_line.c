@@ -16,7 +16,7 @@ static t_list    **malloc_list(t_list ***list, t_list **fd_list, int fd)
 {
 	t_list  *fd_lst;
 	t_list  **lst;
-	int     i;
+	long     i;
 
 	if (!*list)
 		if (!(list[0] = (t_list **)malloc(sizeof(t_list*))) || (list[0][0] = NULL))
@@ -25,7 +25,7 @@ static t_list    **malloc_list(t_list ***list, t_list **fd_list, int fd)
 	{
 		if (!(*fd_list = (t_list *)malloc(sizeof(t_list))))
 			return (NULL);
-		(*fd_list)->content = (void *)"\0";
+		(*fd_list)->content = (void *)0;
 		(*fd_list)->content_size = (size_t)fd;
 		(*fd_list)->next = NULL;
 	}
@@ -55,17 +55,15 @@ static t_list    **malloc_list(t_list ***list, t_list **fd_list, int fd)
 
 int     create_list(int fd, t_list **list)
 {
-	int             byte;
 	int             end;
 	int             start;
 	t_list          *new;
 	char            *str;
 
-	if (!(str = ft_strnew(BUFF_SIZE)))
+	if (!(str = ft_strnew(BUFF_SIZE + 1)))
 		return (0);
-	if ((byte = (int)read(fd, str, BUFF_SIZE - 1)))
+	if (((int)read(fd, str, BUFF_SIZE)))
 	{
-		str[byte] = '\0';
 		end = 0;
 		while (str[end])
 		{
@@ -81,6 +79,8 @@ int     create_list(int fd, t_list **list)
 		}
 
 	}
+	else
+	    return (0);
 	return (1);
 }
 
@@ -103,7 +103,7 @@ int     get_next_line(const int fd, char **line)
 	while (*array)
     {
         *line = ft_strnjoin(*line, (char *)(*array)->content, (*array)->content_size);
-        if (*(*line + (int)(*array)->content_size - 1) == '\n')
+        if (*(*line + ft_strlen(*line) - 1) == '\n' && !(*(*line + ft_strlen(*line) - 1) = '\0'))
 		{
         	*array = ft_lstfree(*array);
             return (1);
@@ -112,10 +112,19 @@ int     get_next_line(const int fd, char **line)
         if (create_list(fd, array))
         {
             *line = ft_strnjoin(*line, (char *)(*array)->content, (*array)->content_size);
+            if (*(*line + ft_strlen(*line) - 1) == '\n' && !(*(*line + ft_strlen(*line) - 1) = '\0'))
+            {
+                *array = ft_lstfree(*array);
+                return (1);
+            }
             *array = ft_lstfree(*array);
-            return (1);
+            create_list(fd, array);
         }
+
+
     }
+    if (**line)
+        return (1);
 
 
 
