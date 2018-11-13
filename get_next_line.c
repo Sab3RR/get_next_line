@@ -77,6 +77,7 @@ int     create_list(int fd, t_list **list)
 				ft_lstpushback(list[0], new);
 
 		}
+		free(str);
 
 	}
 	else
