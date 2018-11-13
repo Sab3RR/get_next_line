@@ -25,16 +25,16 @@ static t_list    **malloc_list(t_list ***list, t_list **fd_list, int fd)
 	{
 		if (!(*fd_list = (t_list *)malloc(sizeof(t_list))))
 			return (NULL);
-		(*fd_list)->content = list[0];
+		(*fd_list)->content = (void *)"\0";
 		(*fd_list)->content_size = (size_t)fd;
 		(*fd_list)->next = NULL;
 	}
-	i = 0;
+    i = 0;
 	fd_lst = *fd_list;
 	while (fd_lst)
 	{
 		if ((int)fd_lst->content_size == fd)
-			return ((t_list **)fd_lst->content);
+			return ((*list) + (int)fd_lst->content);
 		i++;
 		fd_lst = fd_lst->next;
 	}
@@ -46,7 +46,7 @@ static t_list    **malloc_list(t_list ***list, t_list **fd_list, int fd)
 	lst[i] = NULL;
 	if (!(fd_lst = (t_list *)malloc(sizeof(t_list))))
 		return (NULL);
-	fd_lst->content = lst + i;
+	fd_lst->content = (void *)i;
 	fd_lst->content_size = (size_t)fd;
 	fd_lst->next = NULL;
 	ft_lstpushback(*fd_list, fd_lst);
@@ -56,7 +56,6 @@ static t_list    **malloc_list(t_list ***list, t_list **fd_list, int fd)
 int     create_list(int fd, t_list **list)
 {
 	int             byte;
-	int             n;
 	int             end;
 	int             start;
 	t_list          *new;
@@ -64,12 +63,9 @@ int     create_list(int fd, t_list **list)
 
 	if (!(str = ft_strnew(BUFF_SIZE)))
 		return (0);
-	n = 0;
 	if ((byte = (int)read(fd, str, BUFF_SIZE - 1)))
 	{
-		printf("1\n");
 		str[byte] = '\0';
-		n += byte;
 		end = 0;
 		while (str[end])
 		{
@@ -77,7 +73,6 @@ int     create_list(int fd, t_list **list)
 			end = ft_findichar(str + start, '\n') + start + 1;
 			if (!(new = ft_lstnew((str + start), (size_t)(end - start))))
 				return (0);
-			printf("%i\n%s\n", n, (char *)new->content);
 			if (!list[0])
 				list[0] = new;
 			else

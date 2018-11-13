@@ -14,7 +14,13 @@ int     main(void)
 printf("%lu\n", sizeof(t_list **));
     str = (char *)malloc(sizeof(char) * BUFF_SIZE);
     fd = open("/Users/vsusol/CLionProjects/get_next_line1/text", O_RDONLY);
-    while (get_next_line(fd, &str) == 1)
-        printf("%s", str);
+    get_next_line(fd, &str);
+    printf("%s", str);
+    i = open("/Users/vsusol/CLionProjects/get_next_line1/text", O_RDONLY);
+    get_next_line(i, &str);
+    printf("%s", str);
+    get_next_line(fd, &str);
+    printf("%s", str);
+
     return 0;
 }
