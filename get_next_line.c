@@ -34,7 +34,7 @@ static t_list    **malloc_list(t_list ***list, t_list **fd_list, int fd)
 	while (fd_lst)
 	{
 		if ((int)fd_lst->content_size == fd)
-			return ((*list) + (int)fd_lst->content);
+			return ((*list) + (long)fd_lst->content);
 		i++;
 		fd_lst = fd_lst->next;
 	}
@@ -87,16 +87,21 @@ int     create_list(int fd, t_list **list)
 
 int     get_next_line(const int fd, char **line)
 {
-	static t_list   **list;
-	static t_list   *fd_list;
+	static t_list   ***list;
 	t_list          **array;
 
 
 
 
-
-	if (!(array = malloc_list(&list, &fd_list, fd)))
-		return (0);
+    if (!list)
+    {
+        if (!(list = (t_list ***)malloc(sizeof(t_list **) * 2)) && !(list[0] = NULL))
+            return (-1);
+        if (!(list[1] = (t_list **)malloc(sizeof(t_list *))))
+            return (-1);
+    }
+	if (!(array = malloc_list(list, list[1], fd)))
+		return (-1);
 	if (!*array)
 		create_list(fd, array);
 	*line = (char *)malloc(sizeof(char));
