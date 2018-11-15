@@ -19,8 +19,7 @@ int     main(void)
 
 printf("%lu\n", sizeof(t_list **));
     str = (char *)malloc(sizeof(char) * BUFF_SIZE);
-    fd = open("C:\\Users\\vadim\\CLionProjects\\get_next_line\\2600-0.txt", O_RDONLY);
-    fd1 = open("C:\\Users\\vadim\\CLionProjects\\get_next_line\\test.txt", O_CREAT, O_RDWR);
+    fd = open("/Users/vsusol/CLionProjects/get_next_line1/text", O_RDONLY);
     char strr[BUFF_SIZE];
     t = clock();
     i = 0;
@@ -35,6 +34,5 @@ printf("%lu\n", sizeof(t_list **));
     printf("%f\n", time_taken);
     printf("%i", i);
     close(fd);
-    close(fd1);
     return 0;
 }

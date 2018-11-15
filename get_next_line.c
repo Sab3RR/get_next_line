@@ -50,6 +50,7 @@ static t_list    **malloc_list(t_list ***list, t_list **fd_list, int fd)
 	fd_lst->content_size = (size_t)fd;
 	fd_lst->next = NULL;
 	ft_lstpushback(*fd_list, fd_lst);
+    system("leaks get_next_line");
 	return (lst + i);
 }
 
@@ -60,7 +61,7 @@ int     create_list(int fd, t_list **list)
 	t_list          *new;
 	char            *str;
 
-	if (!(str = ft_strnew(BUFF_SIZE + 1)))
+	if (!(str = ft_strnew(sizeof(char) * (BUFF_SIZE + 1))))
 		return (0);
 	if (((int)read(fd, str, BUFF_SIZE)))
 	{
@@ -82,7 +83,19 @@ int     create_list(int fd, t_list **list)
 	}
 	else
 	    return (0);
+    system("leaks get_next_line");
 	return (1);
+}
+
+int     cheack_fd(int fd, char **line)
+{
+    if (!line)
+        return (0);
+    if (fd > 4863)
+        return (0);
+    if (read(fd, "", 0) == -1)
+        return (0);
+    return (1);
 }
 
 int     get_next_line(const int fd, char **line)
@@ -92,26 +105,32 @@ int     get_next_line(const int fd, char **line)
 
 
 
+    if (!cheack_fd(fd, line))
+        return (-1);
 
     if (!list)
     {
-        if (!(list = (t_list ***)malloc(sizeof(t_list **) * 2)) && !(list[0] = NULL))
-            return (-1);
+        if (!(list = (t_list ***)malloc(sizeof(t_list **) * 2)))
+            return (0);
+        list[0] = NULL;
         if (!(list[1] = (t_list **)malloc(sizeof(t_list *))))
-            return (-1);
+            return (0);
+        list[1][0] = NULL;
     }
 	if (!(array = malloc_list(list, list[1], fd)))
-		return (-1);
+		return (0);
 	if (!*array)
 		create_list(fd, array);
 	*line = (char *)malloc(sizeof(char));
 	**line = '\0';
+
 	while (*array)
     {
         *line = ft_strnjoin(*line, (char *)(*array)->content, (*array)->content_size);
         if (*(*line + ft_strlen(*line) - 1) == '\n' && !(*(*line + ft_strlen(*line) - 1) = '\0'))
 		{
         	*array = ft_lstfree(*array);
+            system("leaks get_next_line");
             return (1);
 		}
         *array = ft_lstfree(*array);
@@ -121,6 +140,7 @@ int     get_next_line(const int fd, char **line)
             if (*(*line + ft_strlen(*line) - 1) == '\n' && !(*(*line + ft_strlen(*line) - 1) = '\0'))
             {
                 *array = ft_lstfree(*array);
+                system("leaks get_next_line");
                 return (1);
             }
             *array = ft_lstfree(*array);
@@ -128,10 +148,9 @@ int     get_next_line(const int fd, char **line)
         }
 
 
-    }
+    }system("leaks get_next_line");
     if (**line)
         return (1);
-
 
 
 
