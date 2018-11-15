@@ -18,7 +18,6 @@ int     main(void)
 
 
 printf("%lu\n", sizeof(t_list **));
-    str = (char *)malloc(sizeof(char) * BUFF_SIZE);
     fd = open("/Users/vsusol/CLionProjects/get_next_line1/text", O_RDONLY);
     char strr[BUFF_SIZE];
     t = clock();

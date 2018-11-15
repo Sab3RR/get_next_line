@@ -22,6 +22,6 @@ char	*ft_strnjoin(char const *s1, char const *s2, size_t n)
         return (NULL);
     ft_strcpy(str, s1);
     ft_strncpy(str + ft_strlen(s1), s2, n);
-    free(s1);
+    free((char *)s1);
     return (str);
 }
