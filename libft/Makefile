@@ -75,7 +75,9 @@ FILES		= ft_memset.c \
 				ft_findichar.c \
 				ft_lstfree.c \
 				ft_lstpushback.c \
-				ft_strnjoin.c
+				ft_strnjoin.c \
+				ft_fill_list.c \
+				ft_read_list.c
 
 OBJ			= $(FILES:%.c=%.o)
 

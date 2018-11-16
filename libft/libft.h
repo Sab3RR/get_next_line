@@ -99,11 +99,13 @@ t_list				*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
 */
 
 char				*ft_strnjoin(char const *s1, char const *s2, size_t n);
-void    			ft_lstpushback(t_list *alst, t_list *new);
-int                 ft_findichar(const char *str, int c);
+void				ft_lstpushback(t_list *alst, t_list *new);
+int					ft_findichar(const char *str, int c);
 int					ft_isupper(int c);
 int					ft_islower(int c);
 t_list				*ft_lstfree(t_list *alst);
-
+int					ft_fill_list(char *str, t_list **list);
+int					ft_read_list(char **line, t_list **array,
+						int fd, int (*create_list)(int fd, t_list **array));
 
 #endif

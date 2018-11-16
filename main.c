@@ -18,7 +18,7 @@ int     main(void)
 
 
 printf("%lu\n", sizeof(t_list **));
-    fd = open("/Users/vsusol/CLionProjects/get_next_line1/text", O_RDONLY);
+    fd = open("/Users/vsusol/CLionProjects/get_next_line1/2600-0.txt", O_RDONLY);
     char strr[BUFF_SIZE];
     t = clock();
     i = 0;

@@ -12,31 +12,17 @@
 
 #include "get_next_line.h"
 
-static t_list	**malloc_list(t_list ***list, t_list **fd_list, int fd)
+static t_list	**ret_list(t_list ***list,
+					t_list **fd_list, t_list *fd_lst, int fd)
 {
-	t_list	*fd_lst;
-	t_list	**lst;
 	long	i;
+	t_list	**lst;
 
-	if (!*list)
-		if (!(list[0] = (t_list **)malloc(sizeof(t_list*))) || (list[0][0] = NULL))
-			return (NULL);
-	if (!*fd_list)
-	{
-		if (!(*fd_list = (t_list *)malloc(sizeof(t_list))))
-			return (NULL);
-		(*fd_list)->content = (void *)0;
-		(*fd_list)->content_size = (size_t)fd;
-		(*fd_list)->next = NULL;
-	}
 	i = 0;
-	fd_lst = *fd_list;
 	while (fd_lst)
 	{
 		if ((int)fd_lst->content_size == fd)
-		{
 			return ((*list) + (long)fd_lst->content);
-		}
 		i++;
 		fd_lst = fd_lst->next;
 	}
@@ -55,32 +41,38 @@ static t_list	**malloc_list(t_list ***list, t_list **fd_list, int fd)
 	return (lst + i);
 }
 
-int				create_list(int fd, t_list **list)
+static t_list	**malloc_list(t_list ***list, t_list **fd_list, int fd)
 {
-	int				end;
-	int				start;
-	t_list			*new;
+	t_list	*fd_lst;
+
+	if (!*list)
+	{
+		if (!(list[0] = (t_list **)malloc(sizeof(t_list*)))
+			|| (list[0][0] = NULL))
+			return (NULL);
+	}
+	if (!*fd_list)
+	{
+		if (!(*fd_list = (t_list *)malloc(sizeof(t_list))))
+			return (NULL);
+		(*fd_list)->content = (void *)0;
+		(*fd_list)->content_size = (size_t)fd;
+		(*fd_list)->next = NULL;
+	}
+	fd_lst = *fd_list;
+	return (ret_list(list, fd_list, fd_lst, fd));
+}
+
+static int		create_list(int fd, t_list **list)
+{
 	char			*str;
 
 	if (!(str = ft_strnew(sizeof(char) * (BUFF_SIZE + 1))))
 		return (0);
 	if (((int)read(fd, str, BUFF_SIZE)))
 	{
-		end = 0;
-		while (str[end])
-		{
-			start = end;
-			end = ft_findichar(str + start, '\n') + start + 1;
-			if (!(new = ft_lstnew((str + start), (size_t)(end - start))))
-				return (0);
-			if (!list[0])
-				list[0] = new;
-			else
-				ft_lstpushback(list[0], new);
-
-		}
-		free(str);
-
+		if (!ft_fill_list(str, list))
+			return (0);
 	}
 	else
 	{
@@ -90,7 +82,7 @@ int				create_list(int fd, t_list **list)
 	return (1);
 }
 
-int     cheack_fd(int fd, char **line)
+static int		cheack_fd(int fd, char **line)
 {
 	if (!line)
 		return (0);
@@ -101,12 +93,10 @@ int     cheack_fd(int fd, char **line)
 	return (1);
 }
 
-int     get_next_line(const int fd, char **line)
+int				get_next_line(const int fd, char **line)
 {
 	static t_list	***list;
 	t_list			**array;
-
-
 
 	if (!cheack_fd(fd, line))
 		return (-1);
@@ -125,35 +115,9 @@ int     get_next_line(const int fd, char **line)
 		create_list(fd, array);
 	*line = (char *)malloc(sizeof(char));
 	**line = '\0';
-	while (*array)
-	{
-		*line = ft_strnjoin(*line, (char *)(*array)->content, (*array)->content_size);
-		if (*(*line + ft_strlen(*line) - 1) == '\n' && !(*(*line + ft_strlen(*line) - 1) = '\0'))
-		{
-			*array = ft_lstfree(*array);
-			return (1);
-		}
-		*array = ft_lstfree(*array);
-		if (create_list(fd, array))
-		{
-			*line = ft_strnjoin(*line, (char *)(*array)->content, (*array)->content_size);
-			if (*(*line + ft_strlen(*line) - 1) == '\n' && !(*(*line + ft_strlen(*line) - 1) = '\0'))
-			{
-				*array = ft_lstfree(*array);
-				return (1);
-			}
-			*array = ft_lstfree(*array);
-			create_list(fd, array);
-		}
-
-
-	}
+	if (ft_read_list(line, array, fd, &create_list))
+		return (1);
 	if (**line)
 		return (1);
-
-
-
-
 	return (0);
 }
-

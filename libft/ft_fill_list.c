@@ -1,27 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strnjoin.c                                      :+:      :+:    :+:   */
+/*   ft_fill_list.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vsusol <vsusol@student.unit.ua>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/09 11:10:41 by vsusol            #+#    #+#             */
-/*   Updated: 2018/11/09 11:10:42 by vsusol           ###   ########.fr       */
+/*   Created: 2018/11/16 15:29:51 by vsusol            #+#    #+#             */
+/*   Updated: 2018/11/16 15:29:54 by vsusol           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strnjoin(char const *s1, char const *s2, size_t n)
+int		ft_fill_list(char *str, t_list **list)
 {
-	char	*str;
+	long	end;
+	long	start;
+	t_list	*new;
 
-	if (!s1 || !s2)
-		return (NULL);
-	if (!(str = ft_strnew(ft_strlen(s1) + n)))
-		return (NULL);
-	ft_strcpy(str, s1);
-	ft_strncpy(str + ft_strlen(s1), s2, n);
-	free((char *)s1);
-	return (str);
+	end = 0;
+	while (str[end])
+	{
+		start = end;
+		end = ft_findichar(str + start, '\n') + start + 1;
+		if (!(new = ft_lstnew((str + start), (size_t)(end - start))))
+			return (0);
+		if (!list[0])
+			list[0] = new;
+		else
+			ft_lstpushback(list[0], new);
+	}
+	free(str);
+	return (1);
 }
